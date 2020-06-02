@@ -7,6 +7,7 @@ use \Hcode\Model;
 class User extends Model {
 
 
+      const SESSION = "User";   
       public static function login($Login, $password)
       {
           $sql = new Sql();
@@ -24,11 +25,38 @@ class User extends Model {
           $data = $results[0];
 
           if (password_verify($password, $data["despassword"]) === true) {
+             
               $user = new User();
+
               $user->setiduser($data["iduser"]);
+              
+              $_SESSION[User::SESSION] = $user->getValues();
+
+              return $user;
           } else {
               throw new \Exception("Usuário inexistente ou senha inválida.");
+             
+             
           }
       }
+
+
+    public static function verifyLogin($inadmin = true)
+    {
+        if (
+            !isset($_SESSION[User::SESSION])
+			|| 
+			!$_SESSION[User::SESSION]
+			||
+			!(int)$_SESSION[User::SESSION]["iduser"] > 0
+			||
+			(bool)$_SESSION[User::SESSION]["iduser"] !== $inadmin
+        ) {
+            header("Location:" .BASE_URL."admin/login");
+            exit;  
+        }
+    } 
+
+
 }
 ?>
