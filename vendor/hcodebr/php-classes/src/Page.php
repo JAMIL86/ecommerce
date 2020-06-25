@@ -11,7 +11,7 @@ class Page{
     private $defaults = [
         "header"=>true,
         "footer"=>true,
-        "data"=> []
+        "data"=>[]
     ];
 
     public function __construct($opts = array(),$tpl_dir = "/ecommerce/views/")
